@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+#include <conio.h>
+
+struct aluno
+{
+char nome[30];
+int idade;
+};
+
+struct escola
+{
+char nome[30];
+int qtdAlunos;
+struct aluno alunos[10];	// Essa limitação impõe que cada escola tenha no máximo 10 alunos.
+};
+
+struct escola escolas[5];
+struct aluno cadastro[30];
+
+void AssociaAluno(struct aluno *a, struct escola *es)
+{
+	int temp;
+	temp = es->qtdAlunos;
+	es->alunos[temp] = *a;
+	es->qtdAlunos +=1;
+};
+
+int VerificarEscola(char *name)
+{
+	int i;
+	for(i=0;i<5;i++)
+	{
+	if(strcmp(name,escolas[i].nome) ==0)
+			return i;
+	}
+	char temp[30];
+	printf("\nEscola não encontrada. Digite novamente.\n");
+	scanf("%s",temp);
+	VerificarEscola(temp);
+}
+
+void IniciarContagem()
+{
+	int i;
+	for (i=0;i<5;i++)
+		escolas[i].qtdAlunos=0;
+}
+
+
+int main() 
+{
+	setlocale (LC_ALL, "");
+	IniciarContagem();	
+	int i,j;
+	for(i=0; i<5;i++)
+	{
+		printf("\nDigite o nome da %da escola:",i+1); 
+		scanf("%s",escolas[i].nome);
+	}
+
+	printf("\nAs escolas cadastradas são: %s",escolas[i].nome);
+	for(i=0; i<5;i++)
+	{
+		printf("\n%s",escolas[i].nome);
+	}	
+	
+	
+	printf("\n-=-=-=-=-=-Cadastro de Alunos-=-=-=-=-=-\n");
+	for(i=0; i<30; i++) // Cadastro de alunos
+	{
+		int temp;
+		char nome[30];
+		printf("\nDigite o nome da escola do aluno %d: ",i+1);
+		scanf("%s",nome);
+		temp = VerificarEscola(nome);
+		printf("\nDigite o nome do aluno: ");
+		scanf("%s",cadastro[i].nome);
+		printf("\nDigite a idade de %s: ",cadastro[i].nome);
+		scanf("%d",cadastro[i].idade);
+		AssociaAluno(&cadastro[i],&escolas[temp]);		
+	}
+	
+	system("cls");
+	printf("\n-=-=-=-=-=-Impressão de Dados-=-=-=-=-=-\n");
+	for(i=0;i<5;i++)
+	{
+		int j;
+		printf("\n%d Alunos Cadastrados na Escola %s\n",escolas[i].qtdAlunos, escolas[i].nome);
+		for(j=0;j<escolas[i].qtdAlunos;j++)
+		{
+			printf("\nNome: %s, Idade: %d",escolas[i].alunos[j].nome, escolas[i].alunos[j].idade);
+		}
+	}
+	
+	return 0;
+}
